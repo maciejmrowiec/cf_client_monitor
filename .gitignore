@@ -2,7 +2,7 @@
 *.o
 *.a
 *.so
-monitor
+cf_client_monitor
 
 # Folders
 _obj
