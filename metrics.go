@@ -29,23 +29,18 @@ func (t *PathSize) GetName() string {
 
 func (t *PathSize) GetValue() (float64, error) {
 
-	out, err := exec.Command("du", "-c", t.filePath).Output()
+	out, err := exec.Command("/bin/bash", "-c", "du -c "+t.filePath+" | grep total | awk '{print $1}'").Output()
 	if err != nil {
 		return 0, err
 	}
 
-	lines := strings.Split(string(out), "\n")
+	fields := strings.Fields(string(out))
 
-	// total line is last in the stream
-
-	lastLine := lines[len(lines)-2]
-	field := strings.Fields(lastLine)
-
-	if len(field) != 2 || field[1] != "total" {
-		return 0, errors.New("Invalid command output: " + lastLine)
+	if len(fields) == 0 {
+		return 0, errors.New("Invalid command output: " + string(out))
 	}
 
-	val, err := strconv.ParseFloat(field[0], 64)
+	val, err := strconv.ParseFloat(fields[len(fields)-1], 64)
 	if err != nil {
 		return 0, err
 	}
