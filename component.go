@@ -29,7 +29,7 @@ func InitDynamicSamplesComponent(hostname string, verbose bool) platform.ICompon
 	NewDynamicCollector(rss).Run()
 
 	component := ext.NewDynamicPluginComponent(hostname, "com.github.maciejmrowiec.cfclientmonitor", verbose)
-	component.AddDynamicMetrica(NewRssPerCommand(rss, "memory/rss", regexp.MustCompile("/var/cfengine/bin/.*")))
+	component.AddDynamicMetrica(NewRssPerCommand(rss, "memory/rss/average", regexp.MustCompile("/var/cfengine/bin/.*")))
 
 	return component
 }

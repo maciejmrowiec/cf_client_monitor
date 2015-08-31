@@ -13,7 +13,7 @@ New Relic monitoring for cfengine client performance.
 * **cpu/tasks/active** - number of currently runnable kernel scheduling entities (processes, threads)
 * **cpu/tasks/total** - number of kernel scheduling entities that currently exist on the system
 
-* **memory/rss/<command name>** - RSS memory usage, sampled by 1s, is the NewRelic sampling inerval is larger, 1s samples are averaged. Unit: [KB]
+* **memory/rss/average/command_name** - RSS memory usage, sampled by 1s, is the NewRelic sampling inerval is larger, 1s samples are averaged. Unit: [KB]
 
 
 #### Installation
