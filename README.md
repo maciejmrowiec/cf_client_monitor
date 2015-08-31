@@ -9,11 +9,10 @@ New Relic monitoring for cfengine client performance.
 * **cpu/loadaverage/1m** - system wide loadaverage 1 minute
 * **cpu/loadaverage/5m** - system wide loadaverage 5 minutes
 * **cpu/loadaverage/15m** - system wide loadaverage 15 minutes
-
 * **cpu/tasks/active** - number of currently runnable kernel scheduling entities (processes, threads)
 * **cpu/tasks/total** - number of kernel scheduling entities that currently exist on the system
-
-* **memory/rss/average/command_name** - RSS memory usage, sampled by 1s, is the NewRelic sampling inerval is larger, 1s samples are averaged. Unit: [KB]
+* **memory/rss/average/command_name** - RSS memory usage, sampled by 1s, if NewRelic sampling inerval is larger, 1s samples are averaged. Unit: [KB]
+ **memory/rss/max/command_name** - Max RSS memory usage, sampled by 1s, if NewRelic sampling inerval is larger, largest sample is reported. Unit: [KB]
 
 
 #### Installation
