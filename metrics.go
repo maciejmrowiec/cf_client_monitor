@@ -47,7 +47,7 @@ func NewRssPerCommand(processor *RssProcessor, path string, commandFilter *regex
 }
 
 func (r *RssPerCommand) GetName(id string) string {
-	return r.path + "/" + id
+	return r.path + "/'" + id + "'"
 }
 
 func (r *RssPerCommand) GetUnits() string {
@@ -60,6 +60,48 @@ func (r *RssPerCommand) GetValue(id string) (float64, error) {
 
 func (r *RssPerCommand) GetIdList() []string {
 	r.samples = r.processor.GetAndPurgeRss()
+	var list []string
+
+	for _, v := range r.processor.GetUniqKeys(r.samples) {
+		if r.filter != nil && !r.filter.MatchString(v) {
+			continue
+		}
+
+		list = append(list, v)
+	}
+
+	return list
+}
+
+type MaxRssPerCommand struct {
+	processor *RssProcessor
+	path      string
+	filter    *regexp.Regexp
+	samples   map[string]ISampleStats
+}
+
+func NewMaxRssPerCommand(processor *RssProcessor, path string, commandFilter *regexp.Regexp) *MaxRssPerCommand {
+	return &MaxRssPerCommand{
+		processor: processor,
+		path:      path,
+		filter:    commandFilter,
+	}
+}
+
+func (r *MaxRssPerCommand) GetName(id string) string {
+	return r.path + "/'" + id + "'"
+}
+
+func (r *MaxRssPerCommand) GetUnits() string {
+	return "KB"
+}
+
+func (r *MaxRssPerCommand) GetValue(id string) (float64, error) {
+	return r.samples[id].(*StatSample).GetMax(), nil
+}
+
+func (r *MaxRssPerCommand) GetIdList() []string {
+	r.samples = r.processor.GetAndPurgeRssMax()
 	var list []string
 
 	for _, v := range r.processor.GetUniqKeys(r.samples) {

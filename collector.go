@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"log"
+	"math"
 	"os/exec"
 	"time"
 )
@@ -103,6 +104,7 @@ func (d *DynamicCollector) executeCmd(name string, args []string, ch chan<- stri
 type StatSample struct {
 	total float64
 	count float64
+	max   float64
 }
 
 func NewStatSample(value float64) *StatSample {
@@ -115,10 +117,16 @@ func NewStatSample(value float64) *StatSample {
 func (s *StatSample) Append(value float64) {
 	s.count += 1
 	s.total += value
+
+	s.max = math.Max(s.max, value)
 }
 
 func (s *StatSample) GetAverage() float64 {
 	return s.total / s.count
+}
+
+func (s *StatSample) GetMax() float64 {
+	return s.max
 }
 
 type Sample struct {

@@ -15,8 +15,9 @@ func init() {
 var RowRegex *regexp.Regexp
 
 type CommandRss struct {
-	rss  float64
-	name string
+	rss    float64
+	rssMax float64
+	name   string
 }
 
 func (p *CommandRss) GetName() string {
@@ -26,16 +27,19 @@ func (p *CommandRss) GetName() string {
 func (p *CommandRss) Aggregate(item IItem) {
 	process := item.(*CommandRss)
 	p.rss += process.rss
+	p.rssMax += process.rssMax
 }
 
 type RssProcessor struct {
 	rss               map[string]ISampleStats
+	rssMax            map[string]ISampleStats
 	measurements_lock sync.Mutex
 }
 
 func NewRssProcessor() *RssProcessor {
 	return &RssProcessor{
-		rss: make(map[string]ISampleStats, 200),
+		rss:    make(map[string]ISampleStats, 200),
+		rssMax: make(map[string]ISampleStats, 200),
 	}
 }
 
@@ -43,6 +47,15 @@ func (i *RssProcessor) GetAndPurgeRss() map[string]ISampleStats {
 	i.measurements_lock.Lock()
 	samples := i.rss
 	i.rss = make(map[string]ISampleStats, 200)
+	i.measurements_lock.Unlock()
+
+	return samples
+}
+
+func (i *RssProcessor) GetAndPurgeRssMax() map[string]ISampleStats {
+	i.measurements_lock.Lock()
+	samples := i.rssMax
+	i.rssMax = make(map[string]ISampleStats, 200)
 	i.measurements_lock.Unlock()
 
 	return samples
@@ -77,6 +90,11 @@ func (i *RssProcessor) AggregateSample(sample ISample) {
 		} else {
 			i.rss[key] = NewStatSample(pio.rss)
 		}
+		if entry, has := i.rssMax[key]; has {
+			entry.Append(pio.rssMax)
+		} else {
+			i.rssMax[key] = NewStatSample(pio.rssMax)
+		}
 	}
 	i.measurements_lock.Unlock()
 }
@@ -101,6 +119,8 @@ func (p *RssProcessor) ParseRow(row string) (IItem, error) {
 	if commandRss.rss, err = strconv.ParseFloat(tokens[0], 64); err != nil {
 		return nil, err
 	}
+
+	commandRss.rssMax = commandRss.rss
 	commandRss.name = tokens[1]
 
 	return commandRss, nil
