@@ -4,8 +4,12 @@ New Relic monitoring for cfengine client performance.
 
 #### Features
 
-*disksize/cfengine* - cfengine installation disk size
-
+**disksize/cfengine** - cfengine installation disk size
+**cpu/loadaverage/1m** - system wide loadaverage 1 minute
+**cpu/loadaverage/5m** - system wide loadaverage 5 minutes
+**cpu/loadaverage/15m** - system wide loadaverage 15 minutes
+**cpu/tasks/active** - number of currently runnable kernel scheduling entities (processes, threads)
+**cpu/tasks/total** - number of kernel scheduling entities that currently exist on the system
 
 #### Installation
 
@@ -37,6 +41,7 @@ To deamonize in backgrund you can use:
 nohup ./cfclientmonitor -key=<my_newrelic_key> >/dev/null 2>&1 &
 ```
 
-**Depends on commands:** 
+**Depends on:** 
 
-* du
+* 'du' command
+* /proc/loadavg

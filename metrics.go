@@ -25,3 +25,7 @@ func SizeCommandToFloat(data []byte) (float64, error) {
 
 	return val, nil
 }
+
+func BytesToFloat(data []byte) (float64, error) {
+	return strconv.ParseFloat(strings.TrimSpace(string(data)), 64)
+}
