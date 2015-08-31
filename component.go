@@ -9,7 +9,7 @@ func InitSingleSamplesComponent(hostname string, verbose bool) platform.ICompone
 
 	component := platform.NewPluginComponent(hostname, "com.github.maciejmrowiec.cfclientmonitor", verbose)
 
-	component.AddMetrica(NewPathSize("disksize/cfengine", "/var/cfengine/"))
+	component.AddMetrica(NewCommandMetric("disksize/cfengine", MakeSizeCommand("/var/cfengine"), "B", SizeCommandToFloat))
 
 	return component
 
