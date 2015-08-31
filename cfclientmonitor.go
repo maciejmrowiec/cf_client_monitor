@@ -17,6 +17,7 @@ func main() {
 	plugin := platform.NewNewrelicPlugin("0.0.1", config.newRelicKey, config.interval*60)
 
 	plugin.AddComponent(InitSingleSamplesComponent(hostName, config.verbose))
+	plugin.AddComponent(InitDynamicSamplesComponent(hostName, config.verbose))
 
 	plugin.Verbose = config.verbose
 	plugin.Run()
